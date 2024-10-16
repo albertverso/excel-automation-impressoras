@@ -3,6 +3,7 @@ from tkinter import filedialog, Label, Button, Entry, StringVar
 from config.logic import process_csv, save_to_excel
 import pandas as pd
 import os  # Importar o módulo os para manipulação de arquivos e diretórios
+from datetime import datetime
 
 def select_file(label):
     # Função para abrir o explorador de arquivos e selecionar o CSV
@@ -38,8 +39,12 @@ def process_file(file_path, start_date, end_date, status_var, status_label):
             output_dir = 'salvos'
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)  # Cria a pasta 'salvos' se não existir
-            
-            output_file = os.path.join(output_dir, 'resultado.xlsx')
+
+            # Capturar a data e hora atuais
+            current_time = datetime.now().strftime('%d-%m-%Y_%H-%M')
+
+            # Definir o nome do arquivo com data e hora
+            output_file = os.path.join(output_dir, f'Resultado_{current_time}.xlsx')
             
             # Salvar os dados processados no Excel
             save_to_excel(df_agrupado, output_file)
