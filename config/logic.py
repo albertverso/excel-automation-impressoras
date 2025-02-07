@@ -20,7 +20,7 @@ def process_csv(file_path, start_date=None, end_date=None):
     df = df[['Nome_Completo', 'Paginas_Color', 'Paginas_Mono', 'Data_de_Impressao']]
 
     # Remover espaços em branco dos nomes e da coluna de data
-    df['Nome_Completo'] = df['Nome_Completo'].str.strip()
+    df['Nome_Completo'] = df['Nome_Completo'].str.strip().str.lower()
     df['Data_de_Impressao'] = df['Data_de_Impressao'].str.strip()
     
     # Converter a coluna 'Data_de_Impressão' para o tipo datetime
