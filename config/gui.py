@@ -4,6 +4,8 @@ from config.logic import process_csv, save_to_excel
 import pandas as pd
 import os  # Importar o módulo os para manipulação de arquivos e diretórios
 from datetime import datetime
+import logging
+import traceback
 
 def select_file(label):
     # Função para abrir o explorador de arquivos e selecionar o CSV
@@ -82,54 +84,65 @@ def format_date(event, entry):
     entry.insert(0, new_text)
 
 def create_gui():
-    # Criando a janela principal
-    root = tk.Tk()
-    root.title("Automação de Processamento de CSV")
+    try:
+        logging.info("Iniciando o interface gráfica...")
+        print("Iniciando o interface gráfica...")
+        # Criando a janela principal
+        root = tk.Tk()
+        root.title("Automação de Processamento de CSV")
 
-    # Rótulo para exibir o caminho do arquivo selecionado
-    label = Label(root, text="Nenhum arquivo selecionado", width=50)
-    label.pack(pady=10)
+        # Rótulo para exibir o caminho do arquivo selecionado
+        label = Label(root, text="Nenhum arquivo selecionado", width=50)
+        label.pack(pady=10)
 
-    # Botão para selecionar o arquivo CSV
-    select_button = Button(root, text="Selecionar Arquivo CSV", command=lambda: select_file(label))
-    select_button.pack(pady=10)
+        # Botão para selecionar o arquivo CSV
+        select_button = Button(root, text="Selecionar Arquivo CSV", command=lambda: select_file(label))
+        select_button.pack(pady=10)
 
-    # Input para data de início
-    start_date_label = Label(root, text="Data de Início (dd/mm/aaaa):")
-    start_date_label.pack(pady=5)
-    start_date_entry = Entry(root)
-    start_date_entry.pack(pady=5)
-    
-    # Ativar formatação automática e limitação no campo de data de início
-    start_date_entry.bind('<KeyRelease>', lambda event: format_date(event, start_date_entry))
+        # Input para data de início
+        start_date_label = Label(root, text="Data de Início (dd/mm/aaaa):")
+        start_date_label.pack(pady=5)
+        start_date_entry = Entry(root)
+        start_date_entry.pack(pady=5)
+        
+        # Ativar formatação automática e limitação no campo de data de início
+        start_date_entry.bind('<KeyRelease>', lambda event: format_date(event, start_date_entry))
 
-    # Input para data de fim
-    end_date_label = Label(root, text="Data de Fim (dd/mm/aaaa):")
-    end_date_label.pack(pady=5)
-    end_date_entry = Entry(root)
-    end_date_entry.pack(pady=5)
+        # Input para data de fim
+        end_date_label = Label(root, text="Data de Fim (dd/mm/aaaa):")
+        end_date_label.pack(pady=5)
+        end_date_entry = Entry(root)
+        end_date_entry.pack(pady=5)
 
-    # Ativar formatação automática e limitação no campo de data de fim
-    end_date_entry.bind('<KeyRelease>', lambda event: format_date(event, end_date_entry))
+        # Ativar formatação automática e limitação no campo de data de fim
+        end_date_entry.bind('<KeyRelease>', lambda event: format_date(event, end_date_entry))
 
-    # Variável para armazenar a mensagem de status
-    status_var = StringVar()
-    status_var.set("")  # Mensagem inicial vazia
+        # Variável para armazenar a mensagem de status
+        status_var = StringVar()
+        status_var.set("")  # Mensagem inicial vazia
 
-    # Rótulo para exibir a mensagem de status
-    status_label = Label(root, textvariable=status_var, wraplength=400, justify="left")
-    status_label.pack(pady=10)
+        # Rótulo para exibir a mensagem de status
+        status_label = Label(root, textvariable=status_var, wraplength=400, justify="left")
+        status_label.pack(pady=10)
 
-    # Botão para processar o arquivo
-    process_button = Button(
-        root, 
-        text="Processar Arquivo", 
-        command=lambda: process_file(label.cget("text"), start_date_entry.get(), end_date_entry.get(), status_var, status_label)
-    )
-    process_button.pack(pady=10)
+        # Botão para processar o arquivo
+        process_button = Button(
+            root, 
+            text="Processar Arquivo", 
+            command=lambda: process_file(label.cget("text"), start_date_entry.get(), end_date_entry.get(), status_var, status_label)
+        )
+        process_button.pack(pady=10)
 
-    # Loop da janela principal
-    root.mainloop()
+        # Loop da janela principal
+        root.mainloop()
+
+    except Exception:
+        error = traceback.format_exc()
+        logging.error(error)
+        print(error)
+    finally:
+        logging.info("Fechando a interface gráfica.")
+        print("Fechando a interface gráfica.")
 
 if __name__ == "__main__":
     create_gui()
