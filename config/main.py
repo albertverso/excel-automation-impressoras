@@ -1,11 +1,22 @@
 import logging
 import traceback
+import os
 
+# Obtém o diretório raiz do script
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Define o caminho do log dentro da raiz do projeto
+log_file = os.path.join(BASE_DIR, 'log.txt')
+
+# Configuração do logging
 logging.basicConfig(
-        filename='C:\\Users\\carlos.filho\\Projects\\excel-automation-impressoras\\log.txt',
-        level=logging.INFO, 
-        format=' %(asctime)s - %(levelname)s - %(message)s',
-        datefmt='%d/%m/%Y %I:%M:%S %p',filemode='a')
+    filename=log_file,
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%d/%m/%Y %I:%M:%S %p',
+    filemode='a'
+)
+
 
 def main():
     try:
